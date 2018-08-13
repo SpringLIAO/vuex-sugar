@@ -10,11 +10,19 @@ module.exports = {
         libraryTarget: 'umd'
     },
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.js$/,
                 loader: 'babel-loader'
-            }
+            },
+            // {
+            //     test: /\.js$/,
+            //     use: {
+            //         loader: 'istanbul-instrumenter-loader',
+            //         options: { esModules: true }
+            //     },
+            //     enforce: 'post',
+            //     exclude: /node_modules|\.spec\.js$|\.test.js$/,
+            // }
         ]
     }
 };
