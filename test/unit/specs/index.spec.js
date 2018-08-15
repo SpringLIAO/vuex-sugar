@@ -1,5 +1,4 @@
-import Vapi from '../src/index';
-var expect = chai.expect;
+import Vapi from '@/index';
 
 describe('Index', function() {
     it('should be a function.', function() {

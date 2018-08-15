@@ -1,5 +1,10 @@
 /* eslint-disable */
 const path = require('path');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+
+function resolve(dir) {
+    return path.join(__dirname, dir);
+}
 
 module.exports = {
     entry: './src/index.js',
@@ -9,20 +14,22 @@ module.exports = {
         library: 'VApi',
         libraryTarget: 'umd'
     },
+    devtool: '#inline-source-map',
+    resolve: {
+        extensions: ['.js', '.json'],
+        alias: {
+            '@': resolve('src')
+        }
+    },
     module: {
         rules: [{
                 test: /\.js$/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
             },
-            // {
-            //     test: /\.js$/,
-            //     use: {
-            //         loader: 'istanbul-instrumenter-loader',
-            //         options: { esModules: true }
-            //     },
-            //     enforce: 'post',
-            //     exclude: /node_modules|\.spec\.js$|\.test.js$/,
-            // }
         ]
-    }
+    },
+    plugins: [
+        new LodashModuleReplacementPlugin()
+    ]
 };

@@ -1,8 +1,10 @@
 // Karma configuration
-// Generated on Mon Aug 13 2018 16:48:22 GMT+0800 (中国标准时间)
+// Generated on Wed Aug 15 2018 10:13:42 GMT+0800 (中国标准时间)
 
-var webpackConfig = require('./webpack.config');
-var path = require('path');
+const webpackConfig = require('../../webpack.config.js');
+delete webpackConfig.entry;
+
+const path = require('path');
 
 module.exports = function(config) {
     config.set({
@@ -13,37 +15,31 @@ module.exports = function(config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha', 'chai'],
+        frameworks: ['mocha', 'chai', 'phantomjs-shim'],
 
 
         // list of files / patterns to load in the browser
         files: [
-            './test/*.js'
+            './index.js'
         ],
 
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: [
+        ],
 
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            './test/*.js': ['webpack'],
-            './src/*.js': ['webpack']
+            './index.js': ['webpack', 'sourcemap']
         },
 
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage-istanbul'],
-
-        coverageIstanbulReporter: {
-            reports: ['html', 'text-summary'],
-            fixWebpackSourcePaths: true,
-            dir: 'test/coverage/'
-        },
+        reporters: ['spec', 'coverage'],
 
 
         // web server port
@@ -65,28 +61,30 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity,
-        webpack: {
-            module: {
-                rules: [{
-                    test: /\.js$/,
-                    use: ['babel-loader',
-                        /*{
-                                               loader: 'istanbul-instrumenter-loader',
-                                               options: { esModules: true }
-                                           }*/
-                    ]
-                }]
-            }
-        }
+
+        webpack: webpackConfig,
+
+        webpackMiddleware: {
+            noInfo: true,
+        },
+
+        coverageReporter: {
+            dir: './coverage',
+            reporters: [
+                { type: 'lcov', subdir: '.' },
+                { type: 'text-summary' },
+            ],
+        },
+
     })
 }

@@ -6,8 +6,17 @@
 
 ``` bash
 
+# install dependencies
+yarn
+
 # build for production with minification
-npm run build
+yarn run build
+
+# run eslint and fix code style
+npm run lint
+
+# run all tests
+yarn run test
 
 ```
 
