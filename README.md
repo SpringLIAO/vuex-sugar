@@ -1,6 +1,6 @@
 # v-api
 
-> u know what i mean
+> A Helper utility to simplify the usage of REST APIs with Vuex 2. Uses the popular HTTP client [axios](https://github.com/mzabriskie/axios) for requests. 
 
 ## Build Setup
 
