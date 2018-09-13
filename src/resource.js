@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign, no-unused-expressions, import/no-cycle */
 import Axios from 'axios';
 import _ from 'lodash';
 import { mergeAsArray } from './util';
@@ -149,17 +150,17 @@ class Resource {
         }
         // action name must be set.
         if (!action) {
-            throw new Error('[v-api]: "action" property must be set.');
+            throw new Error('[vuex-sugar]: "action" property must be set.');
         }
         // action name should be unique
         if (this.actions[action]) {
-            throw new Error(`[v-api]: Illegal action set. "${action}" has been used.`);
+            throw new Error(`[vuex-sugar]: Illegal action set. "${action}" has been used.`);
         }
         // if set path, http method should right.
         if (path && Resource.HTTPMethod.indexOf(method) === -1) {
             const methods = Resource.HTTPMethod.join(', ');
             throw new Error(
-                `[v-api]: Illegal HTTP method set. Following methods are allowed: ${methods}. You chose "${
+                `[vuex-sugar]: Illegal HTTP method set. Following methods are allowed: ${methods}. You chose "${
                     options.method
                 }".`
             );

@@ -3,27 +3,27 @@ import Resource from './resource';
 import { mergeAsArray, mergeStore } from './util';
 import { createStore } from './store';
 
-const Vapi = function(options = {}) {
-    if (!_.isPlainObject(Vapi.defaults)) Vapi.defaults = {};
+const VuexSugar = function(options = {}) {
+    if (!_.isPlainObject(VuexSugar.defaults)) VuexSugar.defaults = {};
     const { resolved, rejected, meta, ...rest } = options;
     if (meta) {
-        rest.meta = Object.assign({}, Vapi.defaults.meta, meta);
+        rest.meta = Object.assign({}, VuexSugar.defaults.meta, meta);
     }
     if (resolved) {
-        rest.resolved = mergeAsArray(Vapi.defaults.resolved, resolved);
+        rest.resolved = mergeAsArray(VuexSugar.defaults.resolved, resolved);
     }
     if (rejected) {
-        rest.rejected = mergeAsArray(Vapi.defaults.rejected, rejected);
+        rest.rejected = mergeAsArray(VuexSugar.defaults.rejected, rejected);
     }
-    return new Resource(Object.assign({}, Vapi.defaults, rest));
+    return new Resource(Object.assign({}, VuexSugar.defaults, rest));
 };
 
 /**
- * Vapi global options.
+ * VuexSugar global options.
  * @type {Object}
  */
-Vapi.defaults = {};
+VuexSugar.defaults = {};
 
 export { createStore, mergeStore };
 
-export default Vapi;
+export default VuexSugar;

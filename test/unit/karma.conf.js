@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Wed Aug 15 2018 10:13:42 GMT+0800 (中国标准时间)
 
-const webpackConfig = require('../../webpack.config.js');
+const webpackConfig = require('./webpack.config.js');
 delete webpackConfig.entry;
 
 const path = require('path');

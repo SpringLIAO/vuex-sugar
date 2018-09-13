@@ -1,6 +1,5 @@
 /* eslint-disable */
 const path = require('path');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 function resolve(dir) {
     return path.join(__dirname, dir);
@@ -9,27 +8,37 @@ function resolve(dir) {
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.join(__dirname, '/lib'),
+        path: path.resolve(__dirname, 'lib'),
         filename: 'index.js',
-        library: 'VApi',
-        libraryTarget: 'umd'
+        library: 'VuexSugar',
+        libraryTarget: 'umd',
+        umdNamedDefine: true
     },
-    devtool: '#inline-source-map',
     resolve: {
         extensions: ['.js', '.json'],
         alias: {
             '@': resolve('src')
         }
     },
+    externals: {
+        lodash: {
+            commonjs: 'lodash',
+            commonjs2: 'lodash',
+            amd: 'lodash',
+            root: '_'
+        },
+        axios: {
+            commonjs: 'axios',
+            commonjs2: 'axios',
+            amd: 'axios',
+            root: 'Axios'
+        }
+    },
     module: {
         rules: [{
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
-            },
-        ]
-    },
-    plugins: [
-        new LodashModuleReplacementPlugin()
-    ]
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: [ path.resolve(__dirname, 'node_modules') ]
+        }]
+    }
 };

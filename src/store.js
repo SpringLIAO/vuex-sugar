@@ -1,8 +1,8 @@
+/* eslint-disable no-param-reassign, no-unused-expressions, import/no-cycle */
 import _ from 'lodash';
 import Resource from './resource';
 import { mergeAsArray } from './util';
 
-/* eslint-disable no-param-reassign, no-unused-expressions */
 /*
  * execute resolved or rejected。
  */
