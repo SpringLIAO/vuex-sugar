@@ -850,7 +850,30 @@ this.updatePost({
 - **用法**:
 
 
-    第二个参数包含了接口的返回结果。如果在`action`提交时，添加了其他额外数据，这里也会被合并传入进来。
+    第二个参数为错误信息。
+
+### `# before`
+
+- **类型**: `Function`
+- **参数**: `(error, data: any, context: { dispatch, commit, state, rootState })` 第三个参数为`Vuex action`参数
+- **用法**:
+
+    在action执行（发起请求）之前执行钩子函数。注意：普通aciton也会执行before钩子函数。
+    ```js
+    get({
+        action: 'getPost', // action name
+        property: 'post', // state property name
+        headers: { userName: 'test' },
+        before: (undefined, undefined, { dispatch }) => dispatch('action name', {})
+    )
+    ```
+  
+#### `# after`
+
+- **类型**: `Function`
+- **参数**: `(error, data: any, context: { dispatch, commit, state, rootState })` 第三个参数为`Vuex action`的第一个参数
+
+    在action执行（发起请求）之后执行钩子函数。用法同`before`一致。
 
 ### <a id="store-options">store选项</a>
 
@@ -961,13 +984,46 @@ this.updatePost({
     ```
     提交`action`时，可以指定请求参数，或者传入来自页面的元数据，或者页面组件的回调等内容。
 
-    这里可以传入`after`、`before`钩子函数，分别在请求发起之前与请求发起之后调用。函数签名为`(error, data: any)`
+    这里可以传入`after`、`before`钩子函数，分别在请求发起之前与请求发起之后调用。函数签名为`(error, data: any, context: { dispatch, commit, state, rootState })`。
 
     其中第一个参数为`error`对象，第二个在`after`中是请求的返回结果。注意：这里请求成功或者失败都会被调用。
 
     注意`after`区别于`resolved`与`rejected`，虽然他们都能完成绝大部分相同的工作。但是`after`不管成功或失败都会调用，`resolved`与`rejected`只有在确定成功或失败才会分别调用。
 
     添加`after`、`before`钩子函数的好处在于，可以在请求开始前后做一些额外的操作，比如：更改页面的状态。
+    
+    ```js
+    {
+        params, // 请求参数对象，将被传入axios
+        data, // 提交的数据队形，将被传入axios
+        meta, // 提交的元数据，会被action的header或者path函数使用
+        after, // action的前置钩子函数
+        before, // action的后置钩子函数，注意：普通action也会执行before与after
+        resolved, // 请求成功的回调，详细使用方式将`Vuex实例选项`
+        rejected, // 请求失败的回调，实际上：普通action也会执行resolved与rejected
+        ...other // 提交action时，传递的额外数据。这些数据会传入successHandler，或者传入resolved（rejected）中规定的下一个action
+    }
+    ```
+
+### <a id="global-defaults">全局属性</a>
+
+`Vuex-Sugar`拥有一些全局属性，他们会被每个`Vuex-Sugar`实例使用。
+
+全局属性对象`VuexSugar.defaults`：
+
+```js
+{
+    baseURL,
+    axios,
+    namespaced,
+    validateResponse,
+    meta, // 全局元数据，将与action定义、action提交参数进行合并。{ ...GlobalDefaults.meta, ...ActionOptions.meta, ...ActionPayload.meta }
+    resolved, // 全局回调，将与action定义、action提交参数进行合并。[ ...GlobalDefaults.resolved, ...ActionOptions.resolved, ...ActionPayload.resolved ]
+    rejected // 全局回调，将与action定义、action提交参数进行合并。[ ...GlobalDefaults.rejected, ...ActionOptions.rejected, ...ActionPayload.rejected ]
+}
+```
+
+可以使用全局方法`setGlobal`设置全局属性，默认全局属性为空。
 
 ### <a id="global-methods">全局方法</a>
 
@@ -997,6 +1053,21 @@ this.updatePost({
     mergeStore(store, { state:{}, mutations:{}, getters:{}, actions:{} });
     ```
     允许混入其他自定义的store。
+    
+#### `# setGlobal`
+
+- **函数签名**: `(defaultOptions): VuexSugar`
+- **用法**
+
+    ```js
+    import VuexSugar, { mergeStore, setGlobal } from 'vuex-sugar';
+    
+    // 设置全局属性
+    setGlobal({ baseURL, axios });
+    // or 也可以这样设置
+    VuexSugar.setGlobal({ baseURL, axios })
+    ```
+    允许设置全局属性，每个`VuexSugar`实例都会拥有这些属性。这里属性会根据其参数类型，与`action选项`或者`action提交参数`进行合并，或被覆盖。
 
 ## <a id="dev">开发步骤</a>
 

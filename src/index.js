@@ -24,6 +24,13 @@ const VuexSugar = function(options = {}) {
  */
 VuexSugar.defaults = {};
 
-export { createStore, mergeStore };
+const setGlobal = defaults => {
+    VuexSugar.defaults = { ...defaults };
+    return VuexSugar;
+};
+
+VuexSugar.setGlobal = setGlobal;
+
+export { createStore, mergeStore, setGlobal };
 
 export default VuexSugar;

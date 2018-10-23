@@ -8,7 +8,7 @@ import { mergeAsArray } from './util';
  */
 const execCallBack = ({ dispatch, callback, data, rest }) => {
     if (typeof callback === 'string') {
-        dispatch(callback, { ...data, ...rest });
+        dispatch(callback, { data, ...rest });
         return;
     }
     if (_.isFunction(callback)) {
@@ -17,7 +17,7 @@ const execCallBack = ({ dispatch, callback, data, rest }) => {
     }
     if (_.isPlainObject(callback)) {
         const { action, root = false, ...callbackPayload } = callback;
-        dispatch(action, { ...data, ...callbackPayload, ...rest }, { root });
+        dispatch(action, { data, ...callbackPayload, ...rest }, { root });
         return;
     }
     if (_.isArray(callback)) {
@@ -28,9 +28,12 @@ const execCallBack = ({ dispatch, callback, data, rest }) => {
 /*
  * execute hooks
  */
-const execHook = (callback, error, data) => {
+const execHook = (callback, error, data, context) => {
     if (_.isFunction(callback)) {
-        callback(error, data);
+        callback(error, data, context);
+    }
+    if (_.isArray(callback)) {
+        callback.forEach(c => execHook(c, error, data, context));
     }
 };
 
@@ -39,7 +42,7 @@ const execHook = (callback, error, data) => {
  * @see Vuex action
  * @return {Promise} axios Involved axios
  */
-async function commonAction({ commit, dispatch }, payload) {
+async function commonAction(context, payload) {
     const {
         _type,
         _types,
@@ -55,32 +58,36 @@ async function commonAction({ commit, dispatch }, payload) {
         rejected,
         ...rest
     } = payload;
+    const { commit, dispatch } = context;
     const [BEGIN, SUCCESS, FAILURE] = _types;
     try {
+        execHook(before, undefined, undefined, context);
         if (_plain) {
             commit(_type, { data, ...rest });
+            execHook(after, undefined, undefined, context);
+            execCallBack({ dispatch, data, callback: resolved, rest });
             return Promise.resolve();
         }
         // if not a plain action (is a http request action.)
-        before && execHook(before);
         BEGIN && commit(BEGIN);
         return _requestFn({ params, data, meta })
             .then(res => {
                 const resValidate = _validateResponse(res);
                 const { data: value } = res;
                 if (!resValidate) return Promise.reject(value);
-                after && execHook(after, undefined, value);
+                execHook(after, undefined, value, context);
                 commit(SUCCESS, { ...rest, data: value });
                 execCallBack({ dispatch, data: value, callback: resolved, rest });
                 return Promise.resolve(res);
             })
             .catch(e => {
-                after && execHook(after, e);
-                commit(FAILURE, { msg: `${e}` });
+                execHook(after, e, undefined, context);
+                commit(FAILURE, { error: e, msg: `${e}` });
                 execCallBack({ dispatch, callback: rejected, rest });
                 return Promise.reject(e);
             });
     } catch (e) {
+        execCallBack({ dispatch, callback: rejected, rest });
         return Promise.reject(e);
     }
 }
@@ -213,12 +220,12 @@ class Store {
         Object.keys(actions).forEach(action => {
             const { property, commitString, successHandler, errorHandler, plain } = actions[action];
             mutations[`${commitString}`] = (state, payload = {}) => {
-                if (plain && property) {
+                if (plain) {
                     // if a plain action, allow change state by set successHandler
                     if (successHandler) {
                         successHandler(state, payload);
                     } else if (property) {
-                        state[property] = payload;
+                        state[property] = payload.data;
                     }
                     return;
                 }
@@ -267,15 +274,41 @@ class Store {
         const { resource, successSuffix, errorSuffix } = this;
         const { actions, validateResponse } = resource;
         Object.keys(actions).forEach(action => {
-            const { dispatchString, commitString, requestFn, resolved, rejected, plain } = actions[action];
+            const {
+                dispatchString,
+                commitString,
+                requestFn,
+                resolved,
+                rejected,
+                plain,
+                before,
+                after
+            } = actions[action];
             /**
              * @see vuex action
              */
             storeActions[dispatchString] = async (context, payload = {}) => {
-                const { resolved: actionResolved, rejected: actionRejected, ...rest } = payload;
+                const {
+                    resolved: actionResolved,
+                    rejected: actionRejected,
+                    before: actionBefore,
+                    after: actionAfter,
+                    ...rest
+                } = payload;
                 // merge resolved and rejected from global, instance and action
                 const mergedResolved = actionResolved ? mergeAsArray(resolved, actionResolved) : resolved;
                 const mergedRejected = actionRejected ? mergeAsArray(rejected, actionRejected) : rejected;
+                /**
+                 * @type {String} _type 普通action(非发起请求)的commit type，当
+                 * @type {Array} _types action的commit type数组，分别表示请求的开始、成功和失败
+                 * @type {Boolean} _plain 是否是普通action。action定义中未指定path参数，即为普通action。
+                 * @type {Function} _validateResponse 请求成功与否的校验函数
+                 * @type {[Function]} before action执行的前置钩子函数，包括action定义的before和提交载荷参数中的before。
+                 * @type {[Function]} after action执行的后置钩子函数
+                 * @type {Array} resolved 请求成功回调
+                 * @type {Array} rejected 请求失败回调
+                 * @type {Any} action提交载荷中的剩余数据
+                 */
                 const actionPayload = {
                     _type: plain ? commitString : '',
                     _types: !plain
@@ -284,6 +317,8 @@ class Store {
                     _plain: plain,
                     _validateResponse: validateResponse,
                     _requestFn: requestFn,
+                    before: [before, actionBefore],
+                    after: [after, actionAfter],
                     resolved: mergedResolved,
                     rejected: mergedRejected,
                     ...rest

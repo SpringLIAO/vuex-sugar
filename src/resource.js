@@ -139,6 +139,8 @@ class Resource {
             meta,
             resolved,
             rejected,
+            before,
+            after,
             successHandler,
             errorHandler,
             headers
@@ -206,6 +208,8 @@ class Resource {
             errorHandler,
             resolved: actionResolved,
             rejected: actionRejected,
+            before,
+            after,
             axios: this.axios,
             dispatchString: getDispatchString(action),
             commitString: getCommitString(action),
