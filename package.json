@@ -11,6 +11,8 @@
         "src"
     ],
     "scripts": {
+        "preversion": "npm run lint && npm run build",
+        "version": "npm run build && git add -A",
         "build": "webpack",
         "lint": "eslint --fix --ext .js src",
         "test": "cross-env NODE_ENV=test karma start test/unit/karma.conf.js"
