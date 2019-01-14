@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 
 <a name="0.1.1"></a>
+## 0.1.2 (2019-01-14) 
+
+### Bugs
+
+* fix `requestConfig` option not apply into axios.
+* fix shorthand method (eg: delete、post) or `method` option for `add` did not apply into axios.
+
+<a name="0.1.1"></a>
 ## 0.1.1 (2018-10-22) 
 
 ### Features

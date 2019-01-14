@@ -124,12 +124,18 @@ class Resource {
      * add a Vuex action.
      * @public
      * @param {Object} options
-     * @param {Object|Symbol} options.action Action name
+     * @param {Object|Symbol} [options.action] Action name
      * @param {String|function} [options.path] Request url path, will access meta if it is a function.
      * ...
      * @returns {Resource} return this
      */
     add(options = {}) {
+        // allow add multi action with array.
+        if (_.isArray(options)) {
+            options.forEach(option => this.add(option));
+            return this;
+        }
+
         const {
             action,
             path,
@@ -145,11 +151,6 @@ class Resource {
             errorHandler,
             headers
         } = options;
-        // allow add multi action with array.
-        if (_.isArray(options)) {
-            options.forEach(option => this.add(option));
-            return this;
-        }
         // action name must be set.
         if (!action) {
             throw new Error('[vuex-sugar]: "action" property must be set.');
@@ -177,7 +178,8 @@ class Resource {
             // It is as following: request config base URL > baseURL > axios instance base URL
             const requestConfigWithProperBaseURL = Object.assign(
                 {
-                    baseURL: this.normalizedBaseURL
+                    baseURL: this.normalizedBaseURL,
+                    method
                 },
                 requestConfig
             );
@@ -194,11 +196,23 @@ class Resource {
                     requestConfigWithProperBaseURL.headers = headersFn(dispatchMeta);
                 }
             }
+
+            // assign requestConfig params and data into axios options.
+            let requestParams = params;
+            let requestData = data;
+            if (requestConfigWithProperBaseURL.params) {
+                requestParams = Object.assign({}, requestConfigWithProperBaseURL.params, params);
+            }
+
+            if (requestConfigWithProperBaseURL.data) {
+                requestData = Object.assign({}, requestConfigWithProperBaseURL.data, data);
+            }
+
             return this.axios({
                 ...requestConfigWithProperBaseURL,
                 url: urlFn(dispatchMeta),
-                params,
-                data
+                params: requestParams,
+                data: requestData
             });
         };
         this.actions[action] = {
