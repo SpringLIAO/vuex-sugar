@@ -83,7 +83,7 @@ async function commonAction(context, payload) {
             .catch(e => {
                 execHook(after, e, undefined, context);
                 commit(FAILURE, { error: e, msg: `${e}` });
-                execCallBack({ dispatch, callback: rejected, rest });
+                execCallBack({ dispatch, data: e, callback: rejected, rest });
                 return Promise.reject(e);
             });
     } catch (e) {
