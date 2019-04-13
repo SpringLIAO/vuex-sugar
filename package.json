@@ -15,7 +15,9 @@
         "version": "npm run build && git add -A",
         "build": "webpack",
         "lint": "eslint --fix --ext .js src",
-        "test": "cross-env NODE_ENV=test karma start test/unit/karma.conf.js"
+        "test": "cross-env NODE_ENV=test karma start test/unit/karma.conf.js",
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs"
     },
     "devDependencies": {
         "axios": "^0.18.0",
