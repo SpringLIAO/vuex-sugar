@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# git update-index --chmod=+x deploy.sh
 
 # 确保脚本抛出遇到的错误
 set -e

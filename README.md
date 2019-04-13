@@ -89,7 +89,7 @@ In fact, the above code will automatically generate the following code.
 }
 ```
 
-See, all the work is so pleasant and convenient.
+See, all the work is so pleasant and convenient. More details visit [https://springliao.github.io/vuex-sugar/](https://springliao.github.io/vuex-sugar/).
 
 ## Dev Setup
 
@@ -108,5 +108,13 @@ npm run lint
 yarn run test
 
 ```
+
+## CHANGELOG
+
+see [CHANGELOG.md](CHANGELOG.md)
+
+## Thanks
+
+Inspired by [redux-saga](https://github.com/redux-saga/redux-saga) and [vuex-rest-api](https://github.com/christianmalek/vuex-rest-api).
 
 For a detailed explanation on how things work, contact us <www.389055604@qq.com>.

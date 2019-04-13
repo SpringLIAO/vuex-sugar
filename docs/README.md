@@ -1,7 +1,7 @@
 ---
 home: true
 actionText: 快速上手 →
-actionLink: /zh/quick-start
+actionLink: /guide/quick-start
 features:
 - title: 模板代码
   details: 只需简单的设置即可生成Vuex的模板代码，从此不再重复写constant、action、mutation。
