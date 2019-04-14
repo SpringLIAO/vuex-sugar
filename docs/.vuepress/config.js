@@ -50,7 +50,7 @@ module.exports = {
                     { text: '首页', link: '/' },
                     { text: '指南', link: '/guide/' },
                     { text: 'API', link: '/api/' },
-                    { text: 'Changelog', link: '' },
+                    { text: 'Changelog', link: 'https://github.com/SpringLIAO/vuex-sugar/blob/master/CHANGELOG.md' },
                 ]
             },
             '/en/': {
