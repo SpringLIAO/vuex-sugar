@@ -21,7 +21,7 @@ patch(options: Object): VuexSugar
 
 ## 提交 action
 
-通过action name(`action`字段)可以dispatch action。在HTTP中，`post`等请求使用`data`字段指定需要提交的数据，`get`请求使用`params`字段指定查询参数（与`axios`保持一致）。
+通过**action name**(`action`字段指定的名字)可以**dispatch action**。在HTTP中，`post`等请求使用`data`字段指定需要提交的数据，`get`请求使用`params`字段指定查询参数（与`axios`保持一致）。
 
 ```js
 this.listPosts({
@@ -53,7 +53,7 @@ this.updatePost({
 
  除预留的提交参数之外，甚至可以提交其他任意的数据。这些数据将与请求结果一起被传递到`resolved/rejected`回调、`successHandler/errorHandler`等地方。但是这些数据并不会被`vuex-sugar`自动处理。
 
-详情请参考[Api](/api)说明。
+详情请参考[Api](/api/)说明。
 
 
 ## 自定义请求处理方法
