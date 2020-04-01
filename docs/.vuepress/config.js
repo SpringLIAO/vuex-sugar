@@ -1,19 +1,21 @@
 module.exports = {
     title: 'vuex-sugar',
     base: '/vuex-sugar/',
-    description: ' A Helper utility to simplify the usage of REST APIs with Vuex 2. Uses the popular HTTP client for requests.',
+    description:
+        ' A Helper utility to simplify the usage of REST APIs with Vuex 2. Uses the popular HTTP client for requests.',
     locales: {
         '/': {
             lang: 'zh-CN',
             title: 'vuex-sugar',
-            description: '一个帮助简化使用 Vuex 发起 HTTP(REST API)请求的工具。支持 Vuex 2，默认使用流行的 HTTP 客户端axios发起请求。'
+            description:
+                '一个帮助简化使用 Vuex 发起 HTTP(REST API)请求的工具。支持 Vuex 2，默认使用流行的 HTTP 客户端axios发起请求。'
         },
         '/en/': {
             lang: 'en-US'
         }
     },
     themeConfig: {
-        repo: 'SpringLIAO/vuex-sugar',
+        repo: 'Liaoct/vuex-sugar',
         // 假如文档不是放在仓库的根目录下：
         docsDir: 'docs',
         editLinks: true,
@@ -28,8 +30,8 @@ module.exports = {
                 // Service Worker 的配置
                 serviceWorker: {
                     updatePopup: {
-                        message: "发现新内容可用.",
-                        buttonText: "刷新"
+                        message: '发现新内容可用.',
+                        buttonText: '刷新'
                     }
                 },
                 // 默认为 "Edit this page"
@@ -37,20 +39,17 @@ module.exports = {
                 // 当前 locale 的 algolia docsearch 选项
                 algolia: {},
                 sidebar: {
-                    '/guide/': [
-                        '',
-                        'quick-start',
-                        'tutorial'
-                    ],
-                    '/api/': [
-                        ''
-                    ]
+                    '/guide/': ['', 'quick-start', 'tutorial'],
+                    '/api/': ['']
                 },
                 nav: [
                     { text: '首页', link: '/' },
                     { text: '指南', link: '/guide/' },
                     { text: 'API', link: '/api/' },
-                    { text: 'Changelog', link: 'https://github.com/SpringLIAO/vuex-sugar/blob/master/CHANGELOG.md' },
+                    {
+                        text: 'Changelog',
+                        link: 'https://github.com/Liaoct/vuex-sugar/blob/master/CHANGELOG.md'
+                    }
                 ]
             },
             '/en/': {
@@ -59,10 +58,10 @@ module.exports = {
                 editLinkText: 'Edit this page on GitHub',
                 serviceWorker: {
                     updatePopup: {
-                        message: "New content is available.",
-                        buttonText: "Refresh"
+                        message: 'New content is available.',
+                        buttonText: 'Refresh'
                     }
-                },
+                }
             }
         }
     }

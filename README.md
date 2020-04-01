@@ -1,10 +1,10 @@
 # vuex-sugar
 
- A Helper utility to simplify the usage of REST APIs with Vuex 2. Uses the popular HTTP client [axios](https://github.com/mzabriskie/axios) for requests.
+A Helper utility to simplify the usage of REST APIs with Vuex 2. Uses the popular HTTP client [axios](https://github.com/mzabriskie/axios) for requests.
 
- `vuex-sugar` is a library that aims to make application side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) easier to manage, more efficient to execute, powerful and customizable.
+`vuex-sugar` is a library that aims to make application side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) easier to manage, more efficient to execute, powerful and customizable.
 
- If you want to connect a http API (even REST API) with `Vuex` you'll find that there are a few repetitive steps. You need to make a `action` to request the data from the api and make a `mutation` to set the state. And you may want somewhere to centralized handle request, or simplify execute callback. This utility helps in creating the store by setting up the state, mutations and actions with a easy to follow pattern.
+If you want to connect a http API (even REST API) with `Vuex` you'll find that there are a few repetitive steps. You need to make a `action` to request the data from the api and make a `mutation` to set the state. And you may want somewhere to centralized handle request, or simplify execute callback. This utility helps in creating the store by setting up the state, mutations and actions with a easy to follow pattern.
 
 [中文文档](README.CN.md)
 
@@ -39,10 +39,10 @@ const posts = VuexSugar({
     .getStore(); // create store object
 
 // step 5
-export const store = new Vuex.Store(posts)
+export const store = new Vuex.Store(posts);
 ```
 
-Then you can dispatch a action and get data that from http response in *.vue.
+Then you can dispatch a action and get data that from http response in \*.vue.
 
 ```
 // dispatch action
@@ -89,11 +89,11 @@ In fact, the above code will automatically generate the following code.
 }
 ```
 
-See, all the work is so pleasant and convenient. More details visit [https://springliao.github.io/vuex-sugar/](https://springliao.github.io/vuex-sugar/).
+See, all the work is so pleasant and convenient. More details visit [https://Liaoct.github.io/vuex-sugar/](https://Liaoct.github.io/vuex-sugar/).
 
 ## Dev Setup
 
-``` bash
+```bash
 
 # install dependencies
 yarn
