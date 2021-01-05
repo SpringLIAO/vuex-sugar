@@ -20,7 +20,7 @@
         "docs:build": "vuepress build docs"
     },
     "devDependencies": {
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "babel": "^6.23.0",
         "babel-core": "^6.26.3",
         "babel-eslint": "^8.2.6",
@@ -46,7 +46,7 @@
         "lodash": "^4.17.10"
     },
     "peerDependencies": {
-        "axios": "^0.18.0"
+        "axios": "^0.21.1"
     },
     "modules": "src/index.js",
     "bugs": {
